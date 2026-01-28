@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row g-5 mt-4">
+    <div class="col-md-8">
+        <h2 class="mb-4">Entradas para el autor "{{ author_username }}"</h2>
+        {% for post in posts %}
+        <article class="blog-post mb-4">
+            <h3><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h3>
+            <p class="text-body-secondary">Publicado el {{ post.created_at }}</p>
+            <div>
+                {{ post.content }}
+            </div>
+        </article>
+        {% empty %}
+            <p>No hay posts para este autor.</p>
+        {% endfor %}
+
+    <!-- Pagination -->
+        <nav class="blog-pagination" aria-label="Pagination">
+            {% if posts.has_previous %}
+                <a class="btn btn-outline-primary rounded-pill" href="?page={{ posts.previous_page_number }}">Older</a>
+            {% else %}
+                <a class="btn btn-outline-primary rounded-pill disabled" href="#" tabindex="-1" aria-disabled="true">Older</a>
+            {% endif %}
+            
+            {% if posts.has_next %} 
+            <a
+                class="btn btn-outline-secondary rounded-pill"
+                href="?page={{ posts.next_page_number }}"
+                >Newer</a>
+            {% else %}
+            <a
+                class="btn btn-outline-secondary rounded-pill disabled"
+                tabindex="-1"
+                href="#"
+                aria-disabled="true"
+                >Newer</a>
+            {% endif %}
+        </nav>
+    </div>
+    {% include "sidebar.html" %}
+</div>
+{% endblock content %}
